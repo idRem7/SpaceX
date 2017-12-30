@@ -6,8 +6,7 @@ using DG.Tweening;
 
 public class GameGenerator : MonoBehaviour {
 
-    public GameObject firstAidKit;
-    public GameObject portal;
+    public GameObject firstAidKit;    
     public GameObject asteroid;
     public GameObject rocket;
     public GameObject spaceShip;
@@ -18,14 +17,7 @@ public class GameGenerator : MonoBehaviour {
     private float _minAsteroidSpawnDistance = 10.0f;
     // Use this for initialization
     void Start () {
-		
-        //спавним портал
-        //На уровне есть всегда 1 портал
-        //сначала спавнится в случайном месте, но не более чем на макс растояние от игрока
-        //если игрок далеко улетает, то портал переспавнивается в другое место по критерию растсояния
-        //здесь его только спавним, хотя его моно спавнить отдельно
-        //Портал сам следит за базаром (за расстоянием от игрока)
-
+		       
 	}
 
     // Update is called once per frame
@@ -34,6 +26,8 @@ public class GameGenerator : MonoBehaviour {
         System.Random randCoord = new System.Random();       
       
         if (Input.GetMouseButtonDown(0)) {
+
+            //Здесь спавнятся ракеты
 
             Instantiate(rocket, rocketSpawn.transform.position, rocketSpawn.transform.rotation);
 
@@ -53,9 +47,9 @@ public class GameGenerator : MonoBehaviour {
             raduis = asteroid.GetComponent<asteroidController>().maxAsteroidLiveRadiusAmoutSpaceShip;
             do {
 
-                spawnPosition.x = (float)randCoord.NextDouble() * raduis - raduis / 2;
-                spawnPosition.y = (float)randCoord.NextDouble() * raduis - raduis / 2;
-                spawnPosition.z = (float)randCoord.NextDouble() * raduis - raduis / 2;
+                spawnPosition.x = raduis * (float)(randCoord.NextDouble() - 0.5);
+                spawnPosition.y = raduis * (float)(randCoord.NextDouble() - 0.5);
+                spawnPosition.z = raduis * (float)(randCoord.NextDouble() - 0.5);
 
             } while (spawnPosition.sqrMagnitude < Mathf.Pow(_minAsteroidSpawnDistance, 2));
             spawnPosition += spaceShip.transform.position;
