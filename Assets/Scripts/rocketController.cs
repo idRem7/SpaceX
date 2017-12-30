@@ -12,7 +12,7 @@ public class rocketController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        transform.DOLocalMove(transform.position + transform.rotation * Vector3.forward * rocketDistance, rocketTime, false);
+        transform.DOMove(transform.position + transform.rotation * Vector3.forward * rocketDistance, rocketTime, false);
         Destroy(gameObject, rocketTime + 0.01f );
 
     }
@@ -22,6 +22,20 @@ public class rocketController : MonoBehaviour {
 		
 	}
 
-    
+    void OnCollisionEnter(Collision collisionWithRocket) {        
+
+        asteroidController isAsteroid = collisionWithRocket.gameObject.GetComponent<asteroidController>();
+
+        if(isAsteroid != null) {
+
+            isAsteroid.destroyFromRocket();
+            
+        }
+
+        Destroy(gameObject);
+
+    }
+
+
 
 }

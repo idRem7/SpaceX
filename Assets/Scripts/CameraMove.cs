@@ -16,11 +16,13 @@ public class CameraMove : MonoBehaviour {
 
     private Vector3 _pozitionAboutSpaceShip;
     private float _minDistance;
+
+
     // Use this for initialization
     void Start () {
 
         _pozitionAboutSpaceShip = lookTarget.InverseTransformPoint(transform.position);
-        _minDistance = Mathf.Sqrt(Vector3.Dot(_pozitionAboutSpaceShip, _pozitionAboutSpaceShip));
+        _minDistance = Mathf.Sqrt(_pozitionAboutSpaceShip.sqrMagnitude);        
 
 	}
 	
@@ -57,7 +59,8 @@ public class CameraMove : MonoBehaviour {
                
                 newPozitionAboutSpaceShip = _pozitionAboutSpaceShip + new Vector3(0, cameraVerticalCorrectFactor, -cameraHorizontalCorrectFactor);
 
-                if (Mathf.Sqrt(Vector3.Dot(newPozitionAboutSpaceShip, newPozitionAboutSpaceShip)) <= maxDistance) {  
+                
+                if (newPozitionAboutSpaceShip.sqrMagnitude <= Mathf.Pow(maxDistance, 2)) {  
                     
                     _pozitionAboutSpaceShip = newPozitionAboutSpaceShip;
 
@@ -68,9 +71,9 @@ public class CameraMove : MonoBehaviour {
             if (mouseMoveWheel < 0) {
                 
                 newPozitionAboutSpaceShip = _pozitionAboutSpaceShip - new Vector3(0, cameraVerticalCorrectFactor, -cameraHorizontalCorrectFactor);
-
-                if (Mathf.Sqrt(Vector3.Dot(newPozitionAboutSpaceShip, newPozitionAboutSpaceShip)) >= _minDistance) {
-                 
+                                
+                if (newPozitionAboutSpaceShip.sqrMagnitude >= Mathf.Pow(_minDistance, 2)) {
+                                     
                     _pozitionAboutSpaceShip = newPozitionAboutSpaceShip;
 
                 }

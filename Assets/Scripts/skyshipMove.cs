@@ -50,17 +50,21 @@ public class skyshipMove : MonoBehaviour {
             Quaternion pitchRotation;
             Quaternion yawRotation;
 
+            Rigidbody spaceShipPhysicProperties = gameObject.GetComponent<Rigidbody>();
+
             if (mouseMoveX != 0) {
 
+                spaceShipPhysicProperties.Sleep();
                 yawRotation = Quaternion.AngleAxis(mouseMoveX, Vector3.up);
-                transform.DOLocalRotate(yawRotation.eulerAngles, 0.0f, RotateMode.LocalAxisAdd);
+                transform.DORotate(yawRotation.eulerAngles, 0.0f, RotateMode.LocalAxisAdd);
 
             }
 
             if (mouseMoveY != 0) {
 
+                spaceShipPhysicProperties.Sleep();
                 pitchRotation = Quaternion.AngleAxis(mouseMoveY, Vector3.right);
-                transform.DOLocalRotate(pitchRotation.eulerAngles, 0.0f, RotateMode.LocalAxisAdd);
+                transform.DORotate(pitchRotation.eulerAngles, 0.0f, RotateMode.LocalAxisAdd);
 
             }            
 
@@ -76,28 +80,34 @@ public class skyshipMove : MonoBehaviour {
     void moveShip() {
 
         bool moveFlag = false;
+        Rigidbody spaceShipPhysicProperties = gameObject.GetComponent<Rigidbody>();
 
         if (Input.GetKey(KeyCode.W)) {
 
-            transform.DOLocalMove(transform.position + transform.rotation * Vector3.back, 1 / spaceShipSpeed, false);
+            spaceShipPhysicProperties.Sleep();
+            transform.DOMove(transform.position + transform.rotation * Vector3.back, 1 / spaceShipSpeed, false);
+            //spaceShipPhysicProperties.DOLocalMove(transform.position + transform.rotation * Vector3.back, 1 / spaceShipSpeed, false);
             moveFlag = true;
 
         }
         if (Input.GetKey(KeyCode.S)) {
 
-            transform.DOLocalMove(transform.position + transform.rotation * Vector3.forward, 1 / spaceShipSpeed, false);           
+            spaceShipPhysicProperties.Sleep();
+            transform.DOMove(transform.position + transform.rotation * Vector3.forward, 1 / spaceShipSpeed, false);           
             moveFlag = true;
 
         }
         if (Input.GetKey(KeyCode.A)) {
 
-            transform.DOLocalMove(transform.position + transform.rotation * Vector3.right, 1 / spaceShipSpeed, false);         
+            spaceShipPhysicProperties.Sleep();
+            transform.DOMove(transform.position + transform.rotation * Vector3.right, 1 / spaceShipSpeed, false);         
             moveFlag = true;
 
         }
         if (Input.GetKey(KeyCode.D)) {
 
-            transform.DOLocalMove(transform.position + transform.rotation * Vector3.left, 1 / spaceShipSpeed, false);         
+            spaceShipPhysicProperties.Sleep();
+            transform.DOMove(transform.position + transform.rotation * Vector3.left, 1 / spaceShipSpeed, false);         
             moveFlag = true;
 
         }
