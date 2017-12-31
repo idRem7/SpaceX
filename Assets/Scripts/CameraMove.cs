@@ -17,6 +17,8 @@ public class CameraMove : MonoBehaviour {
     private Vector3 _pozitionAboutSpaceShip;
     private float _minDistance;
 
+    
+    //Думаю дописывать тут ничего не придется
 
     // Use this for initialization
     void Start () {

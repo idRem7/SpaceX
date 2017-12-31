@@ -33,9 +33,7 @@ public class skyshipMove : MonoBehaviour {
     }
 
     void FixedUpdate() {
-
         
-
     }
 
     void rotateShip() {

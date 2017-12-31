@@ -5,6 +5,8 @@ using DG.Tweening;
 
 public class rocketController : MonoBehaviour {
 
+    public GameObject gameController;
+
     public float rocketTime = 30.0f;
     public float rocketDistance = 200.0f;
     
@@ -29,10 +31,17 @@ public class rocketController : MonoBehaviour {
         if(isAsteroid != null) {
 
             isAsteroid.destroyFromRocket();
+            gameController.GetComponent<GameStatus>().hitTarget();
             
         }
 
         Destroy(gameObject);
+
+    }
+
+    public void setReferences(GameObject gameControllerReference) {
+   
+        gameController = gameControllerReference;
 
     }
 

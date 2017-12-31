@@ -7,6 +7,7 @@ public class asteroidController : MonoBehaviour {
 
     public GameObject spaceShip;
     public GameObject spawnController;
+    public GameObject gameController;
 
     public float asteroidDistantion = 1000.0f;
     public float asteroidSpeed = 2.0f;
@@ -45,30 +46,46 @@ public class asteroidController : MonoBehaviour {
 
         if (distanceToSpaceShip.sqrMagnitude > Mathf.Pow(maxAsteroidLiveRadiusAmoutSpaceShip, 2)) {
 
-            spawnController.GetComponent<GameGenerator>().decrementCount();
+            spawnController.GetComponent<GameGenerator>().decrementAsteroidCount();
             Destroy(gameObject);
 
         }
         		
 	}
 
-    public void setReferences(GameObject spaceShipReference, GameObject controllerReference) {
+    public void setReferences(GameObject spaceShipReference, GameObject controllerReference, GameObject gameControllerReference) {
 
         spaceShip = spaceShipReference;
         spawnController = controllerReference;
+        gameController = gameControllerReference;
 
     }
 
     public void destroyFromRocket() {
 
-        spawnController.GetComponent<GameGenerator>().decrementCount();
+        spawnController.GetComponent<GameGenerator>().decrementAsteroidCount();
         Destroy(gameObject);
 
     }
 
-    void OnCollisionEnter(Collision collisionWithRocket) {
+    void OnCollisionEnter(Collision collisionWithAsteroid) {
 
-        transform.DOKill();
+        //Запилить отскакивание
+
+        //transform.DOKill();
+        // Наверное нужно что-то дописать
+
+        //если игрок,  то отнимаем хпшку
+
+        //отнять хп
+        //записать в лог
+
+        if(collisionWithAsteroid.gameObject == spaceShip) {
+
+            gameController.GetComponent<GameStatus>().getDamage();
+            
+        }
+
 
     }
 
