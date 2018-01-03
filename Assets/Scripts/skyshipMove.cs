@@ -10,6 +10,8 @@ public class skyshipMove : MonoBehaviour {
     public float spaceShipSpeed = 1.0f;
     public float flameChangeSpeed = 2.0f;   
     public ParticleSystem rocketFlame;
+    public GameObject gameController;
+    public GameStatus mainGameController;
 
 
     private float _maxSpeedFlame = 7.0f;
@@ -22,13 +24,19 @@ public class skyshipMove : MonoBehaviour {
         rocketFlame = GetComponent<ParticleSystem>();
         rocketFlame.startSpeed = _minSpeedFlame;
 
-	}
+        mainGameController = gameController.GetComponent<GameStatus>();
+
+    }
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () {        
 
-        moveShip();
-        rotateShip();
+        if (!mainGameController.getPauseStatus()) {
+
+            moveShip();
+            rotateShip();
+
+        }
 
     }
 
@@ -83,8 +91,7 @@ public class skyshipMove : MonoBehaviour {
         if (Input.GetKey(KeyCode.W)) {
 
             spaceShipPhysicProperties.Sleep();
-            transform.DOMove(transform.position + transform.rotation * Vector3.back, 1 / spaceShipSpeed, false);
-            //spaceShipPhysicProperties.DOLocalMove(transform.position + transform.rotation * Vector3.back, 1 / spaceShipSpeed, false);
+            transform.DOMove(transform.position + transform.rotation * Vector3.back, 1 / spaceShipSpeed, false);          
             moveFlag = true;
 
         }
@@ -111,28 +118,21 @@ public class skyshipMove : MonoBehaviour {
         }
 
 
-        if (moveFlag) {
-           
+        if (moveFlag) {           
             additiveFlame();
-
         } else {
-
             substractiveFlame();
-
         }
+
     }
 
     void additiveFlame() {
 
         if (rocketFlame.startSpeed < _maxSpeedFlame) {
-
             rocketFlame.startSpeed += flameChangeSpeed;
-
         }
         if (rocketFlame.startSpeed > _maxSpeedFlame) {
-
             rocketFlame.startSpeed = _maxSpeedFlame;
-
         }
 
     }
@@ -140,14 +140,10 @@ public class skyshipMove : MonoBehaviour {
     void substractiveFlame() {
 
         if (rocketFlame.startSpeed > _minSpeedFlame) {
-
             rocketFlame.startSpeed -= flameChangeSpeed;
-
         }
         if (rocketFlame.startSpeed < _minSpeedFlame) {
-
             rocketFlame.startSpeed = _minSpeedFlame;
-
         }
 
     }

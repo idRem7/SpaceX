@@ -14,6 +14,7 @@ public class GameGenerator : MonoBehaviour {
     public GameObject rocketSpawn;
     public GameObject healBox;
     public GameObject gameController;
+    public GameStatus mainGameController;
     public int maxAsteroidAmount = 100;
     public int maxHealBoxAmount = 5;
 
@@ -29,12 +30,14 @@ public class GameGenerator : MonoBehaviour {
         _asteroidCount = 0;
         _healBoxCount = 0;
 
-	}
+        mainGameController = gameController.GetComponent<GameStatus>();
+
+    }
 
     // Update is called once per frame
-    void Update() {           
-      
-        if (Input.GetMouseButtonDown(0)) {
+    void Update() {
+         
+        if (Input.GetMouseButtonDown(0) && !mainGameController.isLogWindowActive() && !mainGameController.getPauseStatus()) {
 
             GameObject spawnRocket = Instantiate(rocket, rocketSpawn.transform.position, rocketSpawn.transform.rotation);
             spawnRocket.GetComponent<rocketController>().setReferences(gameController);

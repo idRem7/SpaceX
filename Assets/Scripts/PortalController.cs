@@ -21,7 +21,6 @@ public class PortalController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-
         //спавн
         randomRespawn();
 
@@ -43,14 +42,8 @@ public class PortalController : MonoBehaviour {
 
     void OnTriggerEnter(Collider triggerObject) {
 
-        if (triggerObject.gameObject == spaceShip) {
-
-            //тут делаем переход в другое пространство (сцену)
-            //Напишу потом
-            //И кровью
-
-            //запись в лог
-
+        if (triggerObject.gameObject == spaceShip) {            
+            gameController.GetComponent<GameStatus>().teleportToAnotherWorld();
         }
 
     }

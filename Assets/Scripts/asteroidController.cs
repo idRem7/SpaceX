@@ -10,7 +10,7 @@ public class asteroidController : MonoBehaviour {
     public GameObject gameController;
 
     public float asteroidDistantion = 1000.0f;
-    public float asteroidSpeed = 2.0f;
+    public float asteroidSpeed = 100.0f;
     public float maxAsteroidLiveRadiusAmoutSpaceShip = 1000.0f;
 
 
@@ -26,21 +26,15 @@ public class asteroidController : MonoBehaviour {
         rotationAngles.y = (float)randomizer.NextDouble() * 720 - 360;
         rotationAngles.z = (float)randomizer.NextDouble() * 720 - 360;
         spawnRotation.eulerAngles = rotationAngles;
-
-        //transform.DOLocalMove(transform.position + transform.rotation * Vector3.forward * rocketDistance, rocketTime, false);
-        //transform.DOMove(transform.position + spawnRotation * Vector3.forward * asteroidDistantion, asteroidDistantion / asteroidSpeed);
-        //rigidbody.DOMove(transform.position + spawnRotation * Vector3.forward * asteroidDistantion, asteroidDistantion / asteroidSpeed);
-        Rigidbody r = GetComponent<Rigidbody>();
-        r.DOMove(transform.position + spawnRotation * Vector3.forward * asteroidDistantion, asteroidDistantion / asteroidSpeed);
+        
+        Rigidbody r = GetComponent<Rigidbody>();      
+        r.AddForce(spawnRotation * Vector3.forward * 100);
+        r.AddTorque(spawnRotation * Vector3.forward * 100);
 
     }
 	
 	// Update is called once per frame
 	void Update () {
-
-        //чекать расстояние до игрока
-        //улетел слишком далеко - уничтожаем
-        //уменьшаем счет
 
         Vector3 distanceToSpaceShip = transform.position - spaceShip.transform.position;
 
@@ -68,24 +62,11 @@ public class asteroidController : MonoBehaviour {
 
     }
 
-    void OnCollisionEnter(Collision collisionWithAsteroid) {
-
-        //Запилить отскакивание
-
-        //transform.DOKill();
-        // Наверное нужно что-то дописать
-
-        //если игрок,  то отнимаем хпшку
-
-        //отнять хп
-        //записать в лог
+    void OnCollisionEnter(Collision collisionWithAsteroid) {      
 
         if(collisionWithAsteroid.gameObject == spaceShip) {
-
-            gameController.GetComponent<GameStatus>().getDamage();
-            
+            gameController.GetComponent<GameStatus>().getDamage();            
         }
-
 
     }
 

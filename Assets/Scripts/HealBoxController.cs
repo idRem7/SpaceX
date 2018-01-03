@@ -21,9 +21,7 @@ public class HealBoxController : MonoBehaviour {
 
         Vector3 distanceBetweenPortalAndPlayer = transform.position - spaceShip.transform.position;
         if (distanceBetweenPortalAndPlayer.sqrMagnitude > Mathf.Pow(maxLiveDistance, 2)) {
-
             randomRespawn();
-
         }
 
     }
@@ -31,10 +29,7 @@ public class HealBoxController : MonoBehaviour {
     void OnTriggerEnter(Collider triggerObject) {
 
         
-        if (triggerObject.gameObject == spaceShip) {
-
-
-            //Код прибавления здоровья
+        if (triggerObject.gameObject == spaceShip) {          
 
             gameController.GetComponent<GameStatus>().getHeal();
             spawnController.GetComponent<GameGenerator>().decrementHealBoxCount();
