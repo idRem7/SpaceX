@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 using DG.Tweening;
 
-public class skyshipMove : MonoBehaviour {
+public class SkyshipMove : MonoBehaviour {
 
     public float mouseSensitivity = 30.0f;
     public float spaceShipSpeed = 1.0f;

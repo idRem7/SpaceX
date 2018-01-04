@@ -1,12 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
 
+static public class GameInformationSaver {
+
+    static public int score = 0;
+    static public int hitPoints = 100;
+    static public bool needGetGameInformation = false;
+    static public string logText = "";
+    static public int countLogLines = 0;
+
+}
+
 public class GameStatus : MonoBehaviour {
 
-    enum uiType {GAME_UI, MAIN_MENU, SETTINGS_MENU, GAME_OVER_SCREEN};
+    enum graphicsQuality { LOW, MEDIUM, HIGH };
+    enum uiType {GAME_UI, MAIN_MENU, SETTINGS_MENU, GAME_OVER_SCREEN};    
 
     //------------------------------------------------------------------
 
@@ -19,7 +31,7 @@ public class GameStatus : MonoBehaviour {
     public GameObject gameUserInterface;
     public GameObject mainMenu;
     public GameObject gameOverScreen;
-    //public GameObject settingsMenu;
+    public GameObject settingsMenu;
     public int healVolume = 20;
     public int damageVolume = 10;       
 
@@ -38,22 +50,31 @@ public class GameStatus : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
-        _isLogEnable = false;
-        gameLog.SetActive(_isLogEnable);
-        _hitPoints = 100;
-        _score = 0;
-        scoreText.GetComponent<Text>().text = _scoreLabelTemplate + _score.ToString();
-        hpText.GetComponent<Text>().text = _hpLabelTemplate + _hitPoints.ToString();
+        if (GameInformationSaver.needGetGameInformation) {
+            loadGameDataFromSaver();
+        } else {
 
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //отключить левые менюшки
-        //включить игровой UI
+            _hitPoints = 100;
+            _score = 0;
+
+        }        
+        
+        scoreText.GetComponent<Text>().text = _scoreLabelTemplate + _score.ToString();
+        hpText.GetComponent<Text>().text = _hpLabelTemplate + _hitPoints.ToString();        
+
         gameUserInterface.SetActive(true);
         mainMenu.SetActive(false);
         gameOverScreen.SetActive(false);
+        settingsMenu.SetActive(false);
         _currentUI = uiType.GAME_UI;
 
         disablePauseMode();
+
+        if (gameLog == null)
+            Application.Quit();
+
+        _isLogEnable = false;
+        gameLog.SetActive(_isLogEnable);
 
     }
 	
@@ -68,44 +89,7 @@ public class GameStatus : MonoBehaviour {
         }
 
         if (Input.GetKeyDown(KeyCode.Escape)) {
-            
-
-            switch(_currentUI) {
-
-                case uiType.GAME_UI:
-                 
-                    enablePauseMode();
-                    gameUserInterface.SetActive(false);
-                    mainMenu.SetActive(true);
-                    _currentUI = uiType.MAIN_MENU;
-
-                    break;
-                case uiType.MAIN_MENU:               
-
-                    disablePauseMode();
-                    mainMenu.SetActive(false);
-                    gameUserInterface.SetActive(true);
-                    _currentUI = uiType.GAME_UI;
-
-                    break;
-                case uiType.SETTINGS_MENU:
-
-                    //с паузой ничего не делать
-                    //скрыть меню настройки
-                    //показать главное меню
-                    //поменять флаг активного интерфейса
-
-                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-                    break;
-                case uiType.GAME_OVER_SCREEN:
-
-                    restartGame();
-
-                    break;
-
-            }          
-
+            leaveFromCurrentWindow();
         }
 
     }
@@ -126,24 +110,109 @@ public class GameStatus : MonoBehaviour {
 
     }
 
+    void loadGameDataFromSaver() {
+
+        if (gameLog == null)
+            Application.Quit();
+
+        _hitPoints = GameInformationSaver.hitPoints;
+        _score = GameInformationSaver.score;
+        gameLog.GetComponent<GameLog>().countLines = GameInformationSaver.countLogLines;       
+        GameInformationSaver.needGetGameInformation = false;
+        gameLog.GetComponent<GameLog>().setLogText(GameInformationSaver.logText);
+
+    }
+
+    void loadGameDataToSaver() {
+       
+        GameInformationSaver.hitPoints = _hitPoints;
+        GameInformationSaver.score = _score;        
+        GameInformationSaver.needGetGameInformation = true;
+        GameInformationSaver.countLogLines = gameLog.GetComponent<GameLog>().countLines;
+        GameInformationSaver.logText = gameLog.GetComponent<GameLog>().getLogText();
+
+    }
+
     //------------------------------------------------------------------
+
+    public void setGraphicsQuality(int  setQuality) {
+
+        graphicsQuality needQuality = (graphicsQuality)setQuality;
+
+        switch (needQuality) {
+
+            case graphicsQuality.LOW:
+                QualitySettings.SetQualityLevel((int)QualityLevel.Fastest);               
+                break;
+            case graphicsQuality.MEDIUM:
+                QualitySettings.SetQualityLevel((int)QualityLevel.Simple);
+                break;
+            case graphicsQuality.HIGH:
+                QualitySettings.SetQualityLevel((int)QualityLevel.Fantastic);
+                break;
+
+        }
+
+    }
+
+    public void leaveFromCurrentWindow() {
+
+        switch (_currentUI) {
+
+            case uiType.GAME_UI:
+
+                enablePauseMode();
+                gameUserInterface.SetActive(false);
+                mainMenu.SetActive(true);
+                _currentUI = uiType.MAIN_MENU;
+
+                break;
+            case uiType.MAIN_MENU:
+
+                disablePauseMode();
+                mainMenu.SetActive(false);
+                gameUserInterface.SetActive(true);
+                _currentUI = uiType.GAME_UI;
+
+                break;
+            case uiType.SETTINGS_MENU:           
+
+                settingsMenu.SetActive(false);
+                mainMenu.SetActive(true);
+                _currentUI = uiType.MAIN_MENU;
+
+                break;
+            case uiType.GAME_OVER_SCREEN:
+
+                restartGame();
+
+                break;
+
+        }
+
+    }   
+
+    public void showSettingsScreen() {
+
+        mainMenu.SetActive(false);
+        settingsMenu.SetActive(true);
+        _currentUI = uiType.SETTINGS_MENU;
+
+    }
 
     public void exitGame() {
 
         Application.Quit();
 
-
     }
 
     public void restartGame() {
-
-        Application.LoadLevel(Application.loadedLevel);
-
+        
+        Application.LoadLevel("SceneA");
         //disablePauseMode();
 
     }
    
-
     public bool getPauseStatus() {
 
         return _isPause;
@@ -170,6 +239,8 @@ public class GameStatus : MonoBehaviour {
 
             _hitPoints = MIN_HP;
             hpText.GetComponent<Text>().text = _hpLabelTemplate + _hitPoints.ToString();
+
+            //Нужно сократить
 
             enablePauseMode();
             gameUserInterface.SetActive(false);
@@ -202,12 +273,16 @@ public class GameStatus : MonoBehaviour {
 
     public void teleportToAnotherWorld() {
 
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        //тут просто делаем телепорты
         gameLog.GetComponent<GameLog>().addNote(GameLog._NoteType.TELEPORT);
+        loadGameDataToSaver();
+
+        if (Application.loadedLevelName == "SceneA") {
+            Application.LoadLevel("SceneB");
+
+        } else {
+            Application.LoadLevel("SceneA");
+        }
 
     }
-
 
 }

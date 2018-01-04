@@ -9,33 +9,22 @@ public class PortalController : MonoBehaviour {
     public GameObject spaceShip;
     public float maxLiveDistance = 100.0f;
 
-    private float _minSpawnDistance = 40.0f;
-
-    //спавним портал
-    //На уровне есть всегда 1 портал
-    //сначала спавнится в случайном месте, но не более чем на макс растояние от игрока
-    //если игрок далеко улетает, то портал переспавнивается в другое место по критерию растсояния  
-    //Портал сам следит за базаром (за расстоянием от игрока)
-
+    private float _minSpawnDistance = 40.0f;  
    
 
     // Use this for initialization
     void Start () {
-        //спавн
+      
         randomRespawn();
 
     }
 	
 	// Update is called once per frame
-	void Update () {
-
-        //если игрок слишком далеко - респавн
+	void Update () {     
 
         Vector3 distanceBetweenPortalAndPlayer = transform.position - spaceShip.transform.position;
-        if (distanceBetweenPortalAndPlayer.sqrMagnitude > Mathf.Pow(maxLiveDistance,2)) {
-            
-            randomRespawn();
-            
+        if (distanceBetweenPortalAndPlayer.sqrMagnitude > Mathf.Pow(maxLiveDistance,2)) {            
+            randomRespawn();            
         }
 
 	}

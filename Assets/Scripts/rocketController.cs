@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class rocketController : MonoBehaviour {
+public class RocketController : MonoBehaviour {
 
     public GameObject gameController;
 
@@ -20,13 +20,11 @@ public class rocketController : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
-		
-	}
+	void Update () { }
 
     void OnCollisionEnter(Collision collisionWithRocket) {        
 
-        asteroidController isAsteroid = collisionWithRocket.gameObject.GetComponent<asteroidController>();
+        AsteroidController isAsteroid = collisionWithRocket.gameObject.GetComponent<AsteroidController>();
 
         if(isAsteroid != null) {
 
@@ -44,7 +42,5 @@ public class rocketController : MonoBehaviour {
         gameController = gameControllerReference;
 
     }
-
-
 
 }

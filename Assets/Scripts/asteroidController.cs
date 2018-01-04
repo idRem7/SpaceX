@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class asteroidController : MonoBehaviour {
+public class AsteroidController : MonoBehaviour {
 
     public GameObject spaceShip;
     public GameObject spawnController;

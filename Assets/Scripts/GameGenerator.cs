@@ -40,7 +40,7 @@ public class GameGenerator : MonoBehaviour {
         if (Input.GetMouseButtonDown(0) && !mainGameController.isLogWindowActive() && !mainGameController.getPauseStatus()) {
 
             GameObject spawnRocket = Instantiate(rocket, rocketSpawn.transform.position, rocketSpawn.transform.rotation);
-            spawnRocket.GetComponent<rocketController>().setReferences(gameController);
+            spawnRocket.GetComponent<RocketController>().setReferences(gameController);
 
         }
 
@@ -59,7 +59,7 @@ public class GameGenerator : MonoBehaviour {
         System.Random randCoord = new System.Random();
         Vector3 spawnPosition = new Vector3();
         float raduis;
-        raduis = asteroid.GetComponent<asteroidController>().maxAsteroidLiveRadiusAmoutSpaceShip;
+        raduis = asteroid.GetComponent<AsteroidController>().maxAsteroidLiveRadiusAmoutSpaceShip;
 
         do {
 
@@ -82,7 +82,7 @@ public class GameGenerator : MonoBehaviour {
             case _SpaceObject.ASTEROID:
 
                 GameObject spawnAsteroid = Instantiate(asteroid, spawnPosition, spawnRotation);
-                spawnAsteroid.GetComponent<asteroidController>().setReferences(spaceShip, gameObject, gameController);
+                spawnAsteroid.GetComponent<AsteroidController>().setReferences(spaceShip, gameObject, gameController);
 
                 _asteroidCount++;
 
